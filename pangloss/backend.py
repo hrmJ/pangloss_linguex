@@ -22,6 +22,60 @@ gb4e_fmt = """
 \\trans `{}' \\\\
 """
 
+
+linguex_fmts = {
+        "none": r"\ex. {} \\",
+        "gloss": "\\exg. {} \\\\ \n {} \\\\",
+        "trans": "\\exg. {} \\\\ \n {} \\\\ \n {}"
+        }
+
+
+
+def linguex(lst):
+    """
+    Convert an example list into a series of linguex-formatted interlinear
+    glosses.
+
+    Because example list references are replaced at parsing by Pandoc, the
+    normal syntax of (@foo) cannot be used for labels; instead, a label syntax
+    similar to that used for headers (and tables and figures with
+    pandoc-crossref) is used, namely a {#ex:foo} inserted after the
+    translation, which will be stripped and replaced with a LaTeX label on the
+    relevant example.
+    """
+
+    latex = ""
+    for li in lst.content:
+        lines = break_plain(li.content[0])
+        orig=gloss=trans=""
+        this_ex = ""
+
+        if len(lines)==3:
+            orig, gloss, trans = map(partial(pf.stringify, newlines=False), lines)
+            this_ex += linguex_fmts["trans"].format(orig, gloss, trans)
+        elif len(lines)==2:
+            orig, gloss = map(partial(pf.stringify, newlines=False), lines)
+            this_ex += linguex_fmts["gloss"].format(orig, gloss)
+        else:
+            orig = pf.stringify(lines[0], newlines=False)
+            this_ex += linguex_fmts["none"].format(orig)
+
+        this_ex = re.sub(label_re, r"\label{ex:\1}", this_ex)
+
+        latex += this_ex
+
+        #label_match = None
+        #if label_match:
+        #    label = label_match.group(1)
+        #    trans = trans[:label_match.start() - 1]
+
+        #    latex += linguex_fmt_labelled.format(orig, gloss, trans, label=label)
+        #else:
+        #    latex += get_linguex_fmt(orig, gloss, trans)
+
+    return pf.RawBlock(latex, format='latex')
+
+
 def gb4e(lst):
     """
     Convert an example list into a series of gb4e-formatted interlinear
@@ -84,7 +138,8 @@ def leipzigjs(lst):
 # available formats and backends
 formats = {
         'latex': {
-            'gb4e': gb4e
+            'gb4e': gb4e,
+            'linguex': linguex
             },
         'html': {
             'leipzigjs': leipzigjs
