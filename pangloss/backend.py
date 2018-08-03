@@ -61,7 +61,7 @@ def linguex(lst):
             this_ex += linguex_fmts["none"].format(orig)
 
         this_ex = re.sub(label_re, r"\label{ex:\1}", this_ex)
-        latex += this_ex
+        latex += "\n\n" + this_ex
 
     return pf.RawBlock(latex, format='latex')
 
