@@ -29,18 +29,43 @@ Each example consists of three lines: an original, a word-by-word analysis, and
 an overall translation. Placing `{#ex:...}` after the translation line
 introduces a new label, which can then be referred to with the `@ex:...`
 syntax as in [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref).
-Similar customization of labels and more advanced references are coming soon.
+
+In this modified version, you can have examples in the following format, too:
+
+```
+(@) Вчера    совет     Евразийского   банка      развития           (ЕАБР)   утвердил   
+yesterday   council   Eurasian-GEN   bank-GEN   developmennt-GEN   abbr     confirm-PRET  {#ex:eabr}
+```
+
+Or even without a gloss:
+
+```
+(@) Maanantai oli mukava päivä. {#ex:eisubj}
+```
+
+
 
 ## Installation
 
 Install with:
 
 ```
-pip install -U pangloss
+pip install git+https://github.com/hrmJ/pangloss_linguex
 ```
 
-Use with:
+## Usage
+
+
+An example yaml block of your Rmd or md file:
 
 ```
-pandoc in.md -F pangloss -o out.{pdf,html}
+latexBackend: linguex
+exampleRefFormat: '{}'
+output:
+  pdf_document2: 
+    latex_engine: xelatex
+    pandoc_args:
+      - --filter
+      - pangloss
 ```
+
