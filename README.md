@@ -1,3 +1,8 @@
+Fork of https://github.com/daemanos/pangloss
+
+Adds support for linguex examples + makes it possible to have examples without glosses or translation
+
+
 # pangloss
 
 Provides support for interlinear glosses with Markdown example lists.
