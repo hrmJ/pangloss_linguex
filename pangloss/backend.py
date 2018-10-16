@@ -26,7 +26,7 @@ gb4e_fmt = """
 linguex_fmts = {
         "none": r"\ex. {} ",
         "gloss": "\\exg. {} \\\\ \n {} \\\\",
-        "trans": "\\exg. {} \\\\ \n {} \\\\ \n {}"
+        "trans": "\\exg. {} \\\\ \n  {} \\\\ \n \\footnotesize {}"
         }
 
 
